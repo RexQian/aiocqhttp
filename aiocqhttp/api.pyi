@@ -123,6 +123,14 @@ if sys.version_info >= (3, 8, 0):
         app_version: str
         protocol_version: str
         #__there_might_be_more_fields_below: Any
+
+    class _get_file_ret(TypedDict):
+        file: str
+        url: str
+        file_size: str
+        file_name: str
+        base64: str
+        
 else:
     _send_private_msg_ret = Dict[str, Any]
     _send_group_msg_ret = Dict[str, Any]
@@ -146,6 +154,7 @@ else:
     _can_send_record_ret = Dict[str, Any]
     _get_status_ret = Dict[str, Any]
     _get_version_info_ret = Dict[str, Any]
+    _get_file_ret = Dict[str, Any]
 
 
 class Api:
@@ -712,6 +721,18 @@ class Api:
             self_id: 机器人 QQ 号
         """
 
+    def get_file(
+                self, *,
+                file_id: str,
+        ) -> Union[Awaitable[_get_file_ret], _get_file_ret]:
+                """
+                获取文件信息。
+        
+                Args:
+                file: 文件路径
+                self_id: 机器人 QQ 号
+                """ 
+
 
 # definition to avoid union return types
 class AsyncApi(Api):
@@ -978,6 +999,11 @@ class AsyncApi(Api):
             self_id: Optional[int] = None,
     ) -> None: ...
 
+    async def get_file(
+                self, *,
+                file_id: str,
+    ) -> _get_file_ret: ...
+
 
 # definition to avoid union return types
 class SyncApi(Api):
@@ -1243,3 +1269,8 @@ class SyncApi(Api):
             self, *,
             self_id: Optional[int] = None,
     ) -> None: ...
+
+    def get_file(
+        self, *,
+        file_id: str,
+    ) -> _get_file_ret: ...
